@@ -1,0 +1,218 @@
+<!--
+Copyright (c) 2014, 2018, Oracle and/or its affiliates.
+The Universal Permissive License (UPL), Version 1.0
+-->
+<div class="oj-hybrid-padding">
+
+  <div>
+    <div class="oj-flex-items-pad demo-flex-display">
+
+      <div class="oj-flex">
+
+        <div class="oj-sm-12 oj-md-2 oj-flex-item">
+          <h3 id="headId">Products</h3>
+
+          <oj-list-view id="categories" aria-label="list using observable array" data="[[categoryDataProvider]]"
+            selection-mode="single" on-selection-changed='[[categorySelected]]'>
+            <template slot="itemTemplate">
+              <div class="oj-flex-item"><b>
+                  <oj-bind-text value='[[$current.data.cross_reference]]'></oj-bind-text>
+                </b>
+              </div>
+            </template>
+          </oj-list-view>
+        </div>
+
+        <div class="oj-sm-12 oj-md-7 oj-flex-item" id="listViewContainer">
+          <h3 id="headId">Today's Deals</h3>
+
+          <oj-film-strip id="filmStrip" max-items-per-page='4' aria-label="Set of chemicals" arrow-placement="[[currentNavArrowPlacement]]"
+            arrow-visibility="[[currentNavArrowVisibility]]" looping="page">
+            <oj-bind-for-each data="[[chemicals]]" as="chemical">
+              <template>
+                <div class="oj-panel demo-filmstrip-item" style.display="[[getItemInitialDisplay(chemical.index)]]">
+                  <div>
+                    <!-- <img data-bind="attr:{src: $current.data.image}" /> -->
+                    <img data-bind="attr:{src: $current.data.image}" />
+                  </div>
+
+                  <div>
+                    <oj-bind-text value="[[chemical.data.name]]"></oj-bind-text>
+                  </div>
+                </div>
+              </template>
+            </oj-bind-for-each>
+          </oj-film-strip>
+          <oj-list-view id="listview" class="oj-listview-card-layout" aria-label="list using observable array" data="[[dataprovider]]"
+            selection-mode="single">
+
+            <template slot="itemTemplate">
+              <div class="oj-flex-item"><b>
+                  <oj-bind-text value='[[$current.data.item_description]]'></oj-bind-text>
+                </b>
+                <div data-bind="css: 'hud-card-'+$current.data.rownum"></div>
+              </div>
+              <div class="rating">
+                <table>
+                  <tr>
+                    <td>
+                      <oj-rating-gauge id="gauge1" data-bind="value:$current.data.rating" readonly style="width:90px;height:20px;"></oj-rating-gauge>
+
+                    </td>
+                    <td>
+                      <span><b> <a href="#" id="jboxTrigger" data-bind="event: { mouseover: showRatings}" data-bind="text:$current.data.total_ratings">
+                            <oj-bind-text value='[[$current.data.total_ratings]]'></oj-bind-text>
+
+                          </a>
+                        </b>
+                      </span>
+                    </td>
+                  </tr>
+                </table>
+
+              </div>
+              <div>
+                <span>Price:</span>
+                <oj-bind-text value='[[$current.data.fprice]]'>
+                </oj-bind-text>
+              </div>
+              <div>
+                <oj-button data-bind="style:{ width:'100%'}, id:$current.data.id" on-oj-action='[[addToCart]]' class="demo-button-blue">
+                  Add </oj-button>
+
+              </div>
+
+            </template>
+          </oj-list-view>
+        </div>
+        <div class="oj-sm-12 oj-md-3 oj-flex-item" data-bind="visible: total">
+          <h3 id="headId">Shopping Cart</h3>
+
+          <table width="100%">
+            <tbody data-bind="foreach: cartData">
+              <tr>
+                <td colspan="3">
+                  <span data-bind="text: item_description" class="title">
+                  </span>
+                </td>
+              </tr>
+              <tr class="cart">
+                <td>
+                  <span data-bind="text: 'Price:' + fprice" class="price">
+
+                  </span>
+                </td>
+                <td><input type="text" data-bind="value:quantity,event:{change: $parent.quantityChanged}" size="5"
+                    style="text-align:center;"></input></td>
+                <td colspan="3">
+                  <a class="btn btn-danger" href="#" data-bind="click: $parent.removeItemFromCart">
+                    <i class="fas fa-trash-alt fa-lg"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <hr />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table width="100%">
+            <tbody>
+              <tr>
+                <td>
+                  <a class="btn btn-warning" href="#" data-bind="click: emptyCart">
+                    <i class="fas fa-trash-alt fa-lg"></i> Empty Cart</a>
+                </td>
+                <td>
+                  <span>
+                    <span><b>Total:</b></span>
+                    <span class="middle">
+                      <oj-bind-text value='{{total}}'>
+                      </oj-bind-text>
+                    </span>
+                  </span>
+                </td>
+                <td align="right">
+                  <a class="btn btn-success" href="#" data-bind="click: checkOut">
+                    <i class="fas fa-shopping-cart fa-lg"></i> Checkout</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div style="width: 400px;display:none" id="jboxContainer">
+    <div class="row">
+      <div class="side">
+        <div>5 star</div>
+      </div>
+      <div class="middle">
+        <div class="bar-container">
+          <div class="bar-5"></div>
+        </div>
+      </div>
+      <div class="side right">
+        <div id="five">30</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="side">
+        <div>4 star</div>
+      </div>
+      <div class="middle">
+        <div class="bar-container">
+          <div class="bar-4"></div>
+        </div>
+      </div>
+      <div class="side right">
+        <div id="four">63</div>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="side">
+        <div>3 star</div>
+      </div>
+      <div class="middle">
+        <div class="bar-container">
+          <div class="bar-3"></div>
+        </div>
+      </div>
+      <div class="side right">
+        <div id="three">15</div>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="side">
+        <div>2 star</div>
+      </div>
+      <div class="middle">
+        <div class="bar-container">
+          <div class="bar-2"></div>
+        </div>
+      </div>
+      <div class="side right">
+        <div id="two">6</div>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="side">
+        <div>1 star</div>
+      </div>
+      <div class="middle">
+        <div class="bar-container">
+          <div class="bar-1"></div>
+        </div>
+      </div>
+      <div class="side right">
+        <div id="one">20</div>
+      </div>
+    </div>
+  </div>
+</div>

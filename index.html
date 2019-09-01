@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2014, 2018, Oracle and/or its affiliates.
+ The Universal Permissive License (UPL), Version 1.0
+ -->
+
+<!-- ************************ IMPORTANT INFORMATION ************************************
+  This web navigation drawer template is provided as an example of how to configure
+  a JET web application with a navigation drawer as a single page application
+  using ojRouter and oj-module.  It contains the Oracle JET framework and a default
+  requireJS configuration file to show how JET can be setup in a common application.
+  This project template can be used in conjunction with demo code from the JET
+  website to test JET component behavior and interactions.
+
+  Any CSS styling with the prefix "demo-" is for demonstration only and is not
+  provided as part of the JET framework.
+
+  Please see the demos under Cookbook/Patterns/App Shell: Web and the CSS documentation
+  under Support/API Docs/Non-Component Styling on the JET website for more information on how to use 
+  the best practice patterns shown in this template.
+
+  Aria Landmark role attributes are added to the different sections of the application
+  for accessibility compliance. If you change the type of content for a specific
+  section from what is defined, you should also change the role value for that
+  section to represent the appropriate content type.
+  ***************************** IMPORTANT INFORMATION ************************************ -->
+<html lang="en-us">
+
+<head>
+  <title>Sales Center - Ecommerce Platform</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1">
+  <link rel="icon" href="css/images/favicon.ico" type="image/x-icon" />
+
+  <!-- This is the main css file for the default Alta theme -->
+<!-- injector:theme -->
+<link rel="stylesheet" href="css/alta/6.0.0/web/alta.css" id="css" />
+<!-- endinjector -->
+
+  <!-- This contains icon fonts used by the starter template -->
+  <link rel="stylesheet" href="css/demo-alta-site-min.css" type="text/css" />
+
+  <!-- This is where you would add any app specific styling -->
+  <link rel="stylesheet" href="css/app.css" type="text/css" />
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" type="text/css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+    crossorigin="anonymous">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jBox/0.4.9/jBox.js"></script>
+  <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v0.5.3/dist/jBox.all.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jBox/0.4.9/themes/TooltipBorder.min.css">
+  <!-- Latest compiled and minified CSS -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.2.1/flatly/bootstrap.min.css" />
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script> -->
+
+</head>
+
+<body class="oj-web-applayout-body">
+  <!-- Template for rendering navigation items shared between nav bar and nav list -->
+  <script type="text/html" id="navTemplate">
+    <li><a href="#">
+        <span :class="[[$data['iconClass']]]"></span>
+        <oj-bind-text value="[[$data['name']]]"></oj-bind-text>
+      </a></li>
+    </script>
+
+  <div id="globalBody" class="oj-offcanvas-outer-wrapper oj-offcanvas-page">
+    <!--
+         ** Oracle JET V6.0.0 web application navigation drawer pattern.
+         ** Please see the demos under Cookbook/Patterns/App Shell: Web
+         ** and the CSS documentation under Support/API Docs/Non-Component Styling
+         ** on the JET website for more information on how to use this pattern. 
+         ** The off-canvas section is used when the browser is resized to a smaller media
+         ** query size for a phone format and hidden until a user clicks on
+         ** the header hamburger icon.
+      -->
+    <div id="navDrawer" role="navigation" class="oj-contrast-marker oj-web-applayout-offcanvas oj-offcanvas-start">
+      <oj-navigation-list data="[[navDataSource]]" edge="start" item.renderer="[[oj.KnockoutTemplateUtils.getRenderer('navTemplate', true)]]"
+        on-click="[[toggleDrawer]]" selection="{{router.stateId}}">
+      </oj-navigation-list>
+    </div>
+    <div id="pageContent" class="oj-web-applayout-page">
+      <!--
+           ** Oracle JET V6.0.0 web application header pattern.
+           ** Please see the demos under Cookbook/Patterns/App Shell: Web
+           ** and the CSS documentation under Support/API Docs/Non-Component Styling
+           ** on the JET website for more information on how to use this pattern.
+        -->
+      <header role="banner" class="oj-web-applayout-header">
+        <div class="oj-web-applayout-max-width oj-flex-bar oj-sm-align-items-center">
+          <!-- Offcanvas toggle button -->
+          <div class="oj-flex-bar-start oj-md-hide">
+            <oj-button id="drawerToggleButton" class="oj-button-lg" on-oj-action="[[toggleDrawer]]" chroming="half"
+              display="icons">
+              <span slot="startIcon" class="oj-web-applayout-offcanvas-icon"></span>
+              <span>Application Navigation</span>
+            </oj-button>
+          </div>
+          <div class="oj-flex-bar-middle oj-sm-align-items-baseline">
+            <span role="img" class="oj-icon demo-oracle-icon" title="Oracle Logo" alt="Oracle Logo"></span>
+            <h1 class="oj-sm-only-hide oj-web-applayout-header-title" title="Application Name">
+              <oj-bind-text value="[[appName]]"></oj-bind-text>
+            </h1>
+          </div>
+          <span class="fa-stack fa-lg has-badge" data-bind="attr: {'data-count':cartCount()}">
+            <i class="fa fa-shopping-cart fa-stack-lg fa-inverse"></i>
+          </span>
+          <div class="oj-flex-bar-end">
+
+            <!-- Responsive Toolbar -->
+            <oj-toolbar>
+              <oj-menu-button id="userMenu" display="[[smScreen() ? 'icons' : 'all']]" chroming="half">
+                <span style="color:white;">
+                  <oj-bind-text value="[[userLogin]]"></oj-bind-text>
+                </span>
+                <span slot="endIcon" :class="[[{'oj-icon demo-appheader-avatar': smScreen(), 'oj-component-icon oj-button-menu-dropdown-icon': !smScreen()}]]"></span>
+                <oj-menu id="menu1" slot="menu" style="display:none">
+                  <oj-option id="pref" value="pref">Preferences</oj-option>
+                  <oj-option id="help" value="help">Help</oj-option>
+                  <oj-option id="about" value="about">About</oj-option>
+                  <oj-option id="out" value="out">Sign Out</oj-option>
+                </oj-menu>
+              </oj-menu-button>
+            </oj-toolbar>
+          </div>
+        </div>
+        <div role="navigation" class="oj-web-applayout-max-width oj-web-applayout-navbar">
+          <oj-navigation-list class="oj-sm-only-hide oj-md-condense oj-md-justify-content-flex-end" data="[[navDataSource]]"
+            edge="top" item.renderer="[[oj.KnockoutTemplateUtils.getRenderer('navTemplate', true)]]" selection="{{router.stateId}}">
+          </oj-navigation-list>
+        </div>
+      </header>
+      <oj-module role="main" class="oj-web-applayout-max-width oj-web-applayout-content" config="[[moduleConfig]]">
+      </oj-module>
+      <footer class="oj-web-applayout-footer" role="contentinfo">
+        <div class="oj-web-applayout-footer-item oj-web-applayout-max-width">
+          <ul>
+            <oj-bind-for-each data="[[footerLinks]]">
+              <template>
+                <li><a :id="[[$current.data.linkId]]" :href="[[$current.data.linkTarget]]">
+                    <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
+                  </a></li>
+              </template>
+            </oj-bind-for-each>
+          </ul>
+        </div>
+        <div class="oj-web-applayout-footer-item oj-web-applayout-max-width oj-text-secondary-color oj-text-sm">
+          Copyright © 2014, 2018 Oracle and/or its affiliates All rights reserved.
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="js/libs/require/require.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+  <!--Start of Tawk.to Script-->
+  <script type="text/javascript">
+    var Tawk_API = Tawk_API || {},
+      Tawk_LoadStart = new Date();
+    (function () {
+      var s1 = document.createElement("script"),
+        s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/59ebfa7dc28eca75e462764c/default';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode.insertBefore(s1, s0);
+    })();
+  </script>
+  <!--End of Tawk.to Script-->
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+<!--
+ Copyright (c) 2014, 2018, Oracle and/or its affiliates.
+ The Universal Permissive License (UPL), Version 1.0
+ -->
+<div class="oj-hybrid-padding">
+    <h1>Choose shipping address</h1>
+    <div>
+        <!-- To change the content of this section, you will make edits to the about.html file located in the /js/views
+        folder. -->
+    </div>
+    <div class="progressContainer">
+        <ul class="progressbar">
+            <li class="active">Shipping</li>
+            <li>Billing</li>
+            <li>Payment</li>
+            <li>Confirmation</li>
+        </ul>
+    </div>
+    <div id="sampleDemo" style="" class="demo-padding demo-container">
+        <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
+
+            <div id="listViewContainer">
+                <!-- <div>
+                    <oj-label for="selection-mode">Selection Mode</oj-label>
+                    <oj-select-one id="selection-mode" value="{{selectedSelectionMode}}" style="max-width:20em">
+                        <oj-option value="multiple">multiple</oj-option>
+                        <oj-option value="single">single</oj-option>
+                    </oj-select-one>
+                </div> -->
+                <div>
+
+                    <div class="oj-label">
+                        <br />
+                        Address
+                    </div>
+
+                    <oj-list-view id="listview" as='item' aria-label="list to show selection features" data="[[dataProvider]]"
+                        selection="{{selectedItems}}" selection-mode="[[selectedSelectionMode]]" current-item="{{currentItem}}">
+                        <template slot="itemTemplate">
+                            <li>
+                                <div class="oj-flex">
+                                    <div class="oj-flex-item" style="margin:auto;max-width:40px;">
+                                        <oj-checkboxset value='[[handleCheckbox(item.data.id)]]' on-value-changed='[[checkboxListener]]'
+                                            class='oj-checkboxset-no-chrome oj-clickthrough-disabled' :id="[['listview_checkboxset' + item.data.id]]"
+                                            :data-row-id="{{item.data.id}}">
+                                            <oj-option :id="[['listview_checkbox' + item.data.id]]" value="checked"></oj-option>
+                                        </oj-checkboxset>
+                                    </div>
+                                    <!-- <div class="oj-flex-item" style="max-width:70px;margin:auto;">
+                                    <img data-bind="attr: {src: 'images/listView/'+ item.data.name +'.png', alt: item.data.name}">
+                                </div> -->
+                                    <div class="oj-flex-item" style="width: 60%;">
+                                        <div class="oj-flex">
+                                            <div class="oj-lg-10 oj-md-10 oj-sm-12">
+                                                <div class="oj-flex row">
+                                                    <div class="oj-lg-12">
+                                                        <b>Name: </b><span class="header" data-bind="text: item.data.name"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="oj-flex row">
+                                                    <div class="oj-lg-4 oj-md-4 oj-sm-12">
+                                                        <span class="data"><b>Street: </b><span data-bind="text: item.data.address"></span></span>
+                                                    </div>
+                                                    <div class="oj-lg-4 oj-md-4 oj-sm-12">
+                                                        <span class="data"><b>City: </b><span data-bind="text: item.data.city"></span></span>
+                                                    </div>
+                                                    <div class="oj-lg-4 oj-md-4 oj-sm-12">
+                                                        <span class="data"><b>State: </b><span data-bind="text: item.data.state"></span></span>
+                                                    </div>
+                                                </div>
+                                                <div class="oj-flex">
+                                                    <div class="oj-lg-4 oj-md-4 oj-sm-12">
+                                                        <span class="data"><b>Email: </b><span data-bind="text: item.data.email"></span></span>
+                                                    </div>
+                                                    <div class="oj-lg-4 oj-md-4 oj-sm-12">
+                                                        <span class="data"><b>Postal Code: </b><span data-bind="text: item.data.zip"></span></span>
+                                                    </div>
+                                                    <div class="oj-lg-4 oj-md-4 oj-sm-12">
+                                                        <span class="data"><b>Phone: </b><span data-bind="text: item.data.phone1 "></span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </template>
+                    </oj-list-view>
+
+                    <div class="oj-label">
+                        <br />
+                        <!-- <label for="curr-selection">Current Selection:&nbsp;</label>
+                        <span id="curr-selection-value" data-bind="text: ko.toJSON(selectedItems)"></span> -->
+                        <oj-button id='previous' on-oj-action='[[buttonClick]]'>Previous</oj-button>
+
+                        <oj-button id='next' on-oj-action='[[buttonClick]]'>Next</oj-button>
+                        <oj-button id='next' on-oj-action='[[addAddress]]'>Add Address</oj-button>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div id="dialogWrapper">
+        <oj-dialog style="display:none" id="modal" title="Choose address">
+            <div slot="body">
+                Please choose a ship to address
+            </div>
+            <div slot="footer">
+                <oj-button id="okButton" on-oj-action="[[close]]">OK
+                </oj-button>
+            </div>
+        </oj-dialog>
+
+    </div>
+
+    <oj-dialog id="address" title="Add address" style="display:none;width: 75vw; height: 75vh;">
+        <div slot="body">
+            <oj-form-layout label-edge="start" id="fl1">
+
+                <oj-input-text id="first_name" required autocomplete="off" label-hint="First Name" name="firstname"
+                    value="{{firstName}}">
+                </oj-input-text>
+
+                <oj-input-text id="last_name" required autocomplete="off" label-hint="Last Name" value="{{lastName}}">
+                </oj-input-text>
+
+                <oj-input-text id="email" autocomplete="off" label-hint="Email" value="{{email}}">
+
+                </oj-input-text>
+                <oj-input-text id="address" autocomplete="off" label-hint="Street Address" value="{{street}}">
+                </oj-input-text>
+
+                <oj-input-text id="city" autocomplete="off" label-hint="City" value="{{city}}">
+                </oj-input-text>
+
+                <oj-input-text id="state" autocomplete="off" label-hint="State" value="{{state}}">
+                </oj-input-text>
+
+                <oj-input-text id="country" autocomplete="off" label-hint="Country" value="{{country}}">
+                </oj-input-text>
+
+                <oj-input-text id="phone" autocomplete="off" label-hint="Phone" value="{{phone}}">
+                </oj-input-text>
+
+                <oj-input-text id="zip" autocomplete="off" label-hint="Zip" value="{{zip}}">
+                </oj-input-text>
+            </oj-form-layout>
+            <hr />
+            <div class="oj-flex">
+                <div class="oj-flex-item">&nbsp;</div>
+                <div class="oj-flex-item">
+                    <oj-button id="submitBtn" on-oj-action="[[submit]]">Submit</oj-button>
+                </div>
+            </div>
+        </div>
+    </oj-dialog>

@@ -1,0 +1,105 @@
+<!--
+ Copyright (c) 2014, 2018, Oracle and/or its affiliates.
+ The Universal Permissive License (UPL), Version 1.0
+ -->
+<div class="oj-hybrid-padding">
+  <h1>Sales Analytics</h1>
+  <div>
+    To change the content of this section, you will make edits to the customers.html file located in the /js/views
+    folder.
+  </div>
+  <!-- <div class="oj-flex">
+    <div class="oj-panel  oj-lg-4 oj-sm-margin-2x demo-panel-customizations" style="width:100%">
+      <h3>Header</h3>
+
+    </div>
+
+    <div class="oj-panel  oj-lg-4 oj-sm-margin-2x demo-panel-customizations" style="width:100%">
+    </div>
+
+    <div class="oj-panel oj-lg-4 oj-sm-margin-2x demo-panel-customizations" style="width:100%">
+    </div>
+
+  </div> -->
+
+</div>
+<div class="oj-flex">
+
+  <div class="oj-panel  oj-sm-margin-2x demo-panel-customizations" style="width:100%">
+    <h4>Sales by customer year over year</h4>
+
+    <div class="oj-sm-12 oj-lg-12">
+      <oj-chart id="barChart" type="bar" series="[[barSeriesValue]]" groups="[[barGroupsValue]]" animation-on-display="auto"
+        hover-behavior="dim" animation-on-data-change="auto" orientation="[[orientationValue]]"
+        style-defaults.data-label-position="[[labelPosition]]" stack="[[stackValue]]" stack-label="[[stackLabelValue]]"
+        y-axis.tick-label.rendered="off" style="max-width:100%;width:100%;height:350px;margin-top:20px;">
+      </oj-chart>
+      <oj-button value="vertical" on-oj-action='[[toggleOrientation]]'>Toggle Orientation
+      </oj-button>
+    </div>
+  </div>
+</div>
+<div class="oj-flex">
+  <div class="oj-panel  oj-sm-margin-2x demo-panel-customizations" style="width:100%">
+
+    <h4>Sales by product year over year</h4>
+    <div class="oj-sm-12 oj-lg-12">
+      <oj-chart id="barChart" type="bar" series="[[productSeriesValue]]" groups="[[barGroupsValue]]" hover-behavior="dim"
+        animation-on-display="auto" animation-on-data-change="auto" orientation="[[orientationValue]]"
+        style-defaults.data-label-position="[[labelPosition]]" stack="[[stackValue]]" stack-label="[[stackLabelValue]]"
+        y-axis.tick-label.rendered="off" style="max-width:100%;width:100%;height:350px;margin-top:20px;">
+      </oj-chart>
+      <!-- vertical/horizontal toggle button -->
+      <oj-button value="vertical" on-oj-action='[[toggleOrientation]]'>Toggle Orientation
+      </oj-button>
+
+    </div>
+  </div>
+</div>
+<div class="oj-flex">
+
+
+  <div class="oj-sm-12 oj-lg-6">
+
+    <div class="oj-panel  oj-sm-margin-2x demo-panel-customizations" style="width:100%">
+      <h4>Customer to product - Cumulative</h4>
+
+      <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
+        <div id='sunburst-container'>
+          <oj-sunburst animation-on-display="auto" color-label="Depth" size-label="Value" node-defaults.label-display="rotated"
+            data="[[sunburstData]]" style="max-width:650px;width:100%; height:650px;">
+
+            <template slot='nodeTemplate'>
+              <oj-sunburst-node label='[[$current.data.label]]' color='[[handler.getValue($current.parentData.length) ]]'
+                value='[[$current.data.value]]'>
+              </oj-sunburst-node>
+            </template>
+          </oj-sunburst>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="oj-sm-12 oj-lg-6">
+
+    <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
+
+      <div class="oj-panel  oj-sm-margin-2x demo-panel-customizations" style="width:100%">
+        <h4>Product to customer - Cumulative</h4>
+
+        <div id='sunburst-container'>
+          <oj-sunburst animation-on-display="auto" color-label="Depth" size-label="Value" node-defaults.label-display="rotated"
+            data="[[productToCustomerData]]" style="max-width:650px;width:100%; height:650px;">
+
+            <template slot='nodeTemplate'>
+              <oj-sunburst-node label='[[$current.data.label]]' color='[[handler.getValue($current.parentData.length) ]]'
+                value='[[$current.data.value]]'>
+              </oj-sunburst-node>
+            </template>
+          </oj-sunburst>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

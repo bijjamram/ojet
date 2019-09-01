@@ -1,0 +1,164 @@
+<!--
+ Copyright (c) 2014, 2018, Oracle and/or its affiliates.
+ The Universal Permissive License (UPL), Version 1.0
+ -->
+<div class="oj-hybrid-padding">
+  <h1>Order History</h1>
+
+  <div>
+
+    <oj-table id='table' aria-label='Sales Representative Table' data='[[dataprovider]]' columns='{{columnArray}}'
+      style='width: 100%;'>
+    </oj-table>
+    <script type="text/html" id="emp_photo">
+      <td>
+              <span class="avatar" data-bind="attr: {style: 'background-image: url(' + $context.row.Photo + ')'}"></span>
+              </td>
+              </script>
+    <script type="text/html" id="emp_name">
+      <td data-bind="text: $context.row.FirstName + ' ' + $context.row.LastName">
+              </td>
+              </script>
+    <script type="text/html" id="ordernumber">
+      <td>
+              <!-- <oj-input-text label-hint="Revenue"
+              value="{{Revenue}}" name="ordernumber"
+              data-bind="attr: {value: $context.row.ordernumber}"
+              converter= '{
+              "type":"number",
+              "options": {"style": "currency", "currency": "USD", "currencyDisplay": "symbol"}}'>
+              </oj-input-text> -->
+              <!-- <a 
+              data-bind="text:$context.row.ordernumber, click:$parent.linkClicked"
+              name="ordernumber">
+            </a> -->
+            <!-- <a 
+            data-bind="text:$context.row.ordernumber, click:openModal, bindingContext: $context"
+            name="ordernumber" >
+          </a> -->
+          <a 
+          data-bind="text:$context.row.ordernumber, event: { click: $parent.openModal }"
+          name="ordernumber" >
+        </a>
+              </td>
+              </script>
+    <script type="text/html" id="revenue_total_label">
+      <td style="font-weight:bold;">
+              Total Revenue
+              </td>
+              </script>
+    <script type="text/html" id="revenue_total">
+      <td>
+              <oj-input-text id="table:revenue_total" label-hint="Revenue"
+              data-bind="attr: {value: $root.revenue_total_func($context.footerContext)}"
+              name="revenue_total"
+              readonly=true
+              converter= '{
+              "type":"number",
+              "options": {"style": "currency", "currency": "USD", "currencyDisplay": "symbol"}}'>
+              </oj-input-text>
+              </td>
+              </script>
+    <script type="text/html" id="rating">
+      <td>
+              <oj-rating-gauge value='{{$context.row.Rating}}' readonly
+              style="width:60px;height:15px;">
+              </oj-rating-gauge>
+              </td>
+              </script>
+
+  </div>
+
+  <div>
+    <oj-button id='prev' on-oj-action='[[buttonClick]]'>Prev</oj-button>
+    <oj-button id='next' on-oj-action='[[buttonClick]]'>Next</oj-button>
+  </div>
+  <!-- Modal Window-->
+
+  <div id="sampleDemo" class="demo-padding demo-container">
+    <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
+
+      <div id="dialogWrapper">
+        <oj-dialog style="display:none;width: 75vw; height: 75vh;" id="modalDialog1" title="Order Details">
+          <div slot="body">
+            <div class="demo-flex-display">
+              <div class="oj-sm-odd-cols-12 oj-md-odd-cols-2 oj-md-even-cols-4 oj-flex-items-pad">
+                <div class="oj-flex">
+                  <div class="oj-flex-item"><b>Order Number</b></div>
+                  <div class="oj-flex-item" data-bind="text:orderNumber"></div>
+                  <div class="oj-flex-item"><b>Customer Name</b></div>
+                  <div class="oj-flex-item" data-bind="text:customerName"></div>
+                </div>
+                <div class="oj-flex">
+                  <div class="oj-flex-item"><b>Address</b></div>
+                  <div class="oj-flex-item" data-bind="text:address"></div>
+                  <div class="oj-flex-item"><b>Phone</b></div>
+                  <div class="oj-flex-item" data-bind="text:phone"></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              &nbsp;
+            </div>
+            <!-- <div>
+              <oj-table id='table' aria-label='Sales Representative Table' data='[[orderDetailsDataProvider]]' columns='{{orderDetailcolumnArray}}'
+                style='width: 100%;'>
+                <script type="text/html" id="id">
+                  <td data-bind="text: $context.row.ordernumber">
+                          </td>
+                          </script>
+            </div> -->
+            <div>
+              <table width="100%" id="orders">
+                <tr>
+                  <th>Line#</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Product</th>
+                  <th>Address</th>
+                  <th>Status</th>
+
+                </tr>
+                <tbody data-bind="foreach: orderDetails">
+                  <tr>
+                    <td>
+                      <span data-bind="text: orderlinenumber">
+                      </span>
+                    </td>
+                    <td>
+                      <span data-bind="text: quantityordered">
+                    </td>
+                    <td>
+                      <span data-bind="text: priceeach">
+                    </td>
+                    <td>
+                      <span data-bind="text: productline">
+                    </td>
+                    <td>
+                      <span data-bind="text: addressline1 + ', ' + city + ', ' + country + ', ' + postalcode">
+                    </td>
+                    <td>
+                      <span data-bind="text: status">
+                    </td>
+
+                  </tr>
+
+                </tbody>
+              </table>
+
+            </div>
+
+          </div>
+          <div slot="footer">
+            <oj-button id="okButton" on-oj-action="[[close]]">OK
+            </oj-button>
+          </div>
+        </oj-dialog>
+
+      </div>
+
+
+    </div>
+  </div>
+  <!-- Modal Window End-->
+</div>
